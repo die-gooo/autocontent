@@ -126,7 +126,11 @@ export async function POST(request: Request) {
     if (stadiumImage) {
       ctx.save();
       ctx.globalAlpha = 0.28;
-      ctx.filter = "blur(8px)";
+      try {
+        ctx.filter = "blur(8px)";
+      } catch {
+        // Filter not supported, continue without blur
+      }
       ctx.drawImage(stadiumImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
       ctx.restore();
     } else {
@@ -135,12 +139,15 @@ export async function POST(request: Request) {
       ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     }
 
-    // Background gradient
+    // Background gradient (semi-transparent to show stadium)
+    ctx.save();
+    ctx.globalAlpha = 0.6;
     const gradient = ctx.createLinearGradient(0, 0, 0, CANVAS_SIZE);
     gradient.addColorStop(0, "#0f172a");
     gradient.addColorStop(1, "#111827");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    ctx.restore();
 
     // Inner panel
     ctx.fillStyle = "rgba(255,255,255,0.06)";

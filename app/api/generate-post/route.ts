@@ -191,13 +191,10 @@ export async function POST(request: Request) {
     // Buffer PNG
     const buffer = canvas.toBuffer("image/png");
 
-    // 👉 FIX: convert Buffer (Node) → ArrayBuffer (BodyInit valido)
-    const arrayBuffer = buffer.buffer.slice(
-      buffer.byteOffset,
-      buffer.byteOffset + buffer.byteLength,
-    );
+    // ✅ FIX TYPE: usare Uint8Array come BodyInit
+    const uint8 = new Uint8Array(buffer);
 
-    return new Response(arrayBuffer, {
+    return new Response(uint8, {
       status: 200,
       headers: {
         "Content-Type": "image/png",

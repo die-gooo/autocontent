@@ -15,6 +15,7 @@ const CANVAS_SIZE = 1080;
 const LOGO_SIZE = 230;
 const PADDING = 100;
 const CENTER = CANVAS_SIZE / 2;
+const STADIUM_BG_URL = "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?w=1200";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,20 +113,41 @@ export async function POST(request: Request) {
       );
     }
 
-    const [homeLogo, awayLogo] = await Promise.all([
+    const [homeLogo, awayLogo, stadiumImage] = await Promise.all([
       fetchLogo(data.homeLogoUrl),
       fetchLogo(data.awayLogoUrl),
+      loadImage(STADIUM_BG_URL).catch(() => null),
     ]);
 
     const canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     const ctx = canvas.getContext("2d");
 
-    // Background gradient
+    // Stadium background
+    if (stadiumImage) {
+      ctx.save();
+      ctx.globalAlpha = 0.28;
+      try {
+        ctx.filter = "blur(8px)";
+      } catch {
+        // Filter not supported, continue without blur
+      }
+      ctx.drawImage(stadiumImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      ctx.restore();
+    } else {
+      // Fallback: darken overlay
+      ctx.fillStyle = "rgba(0,0,0,0.45)";
+      ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    }
+
+    // Background gradient (semi-transparent to show stadium)
+    ctx.save();
+    ctx.globalAlpha = 0.6;
     const gradient = ctx.createLinearGradient(0, 0, 0, CANVAS_SIZE);
     gradient.addColorStop(0, "#0f172a");
     gradient.addColorStop(1, "#111827");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    ctx.restore();
 
     // Inner panel
     ctx.fillStyle = "rgba(255,255,255,0.06)";

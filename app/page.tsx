@@ -1,64 +1,148 @@
-import Image from "next/image";
+ "use client";
+
+import { useState } from "react";
 
 export default function Home() {
+  const [homeTeamName, setHomeTeamName] = useState("");
+  const [homeLogoUrl, setHomeLogoUrl] = useState("");
+  const [awayTeamName, setAwayTeamName] = useState("");
+  const [awayLogoUrl, setAwayLogoUrl] = useState("");
+  const [finalScore, setFinalScore] = useState("");
+  const [competition, setCompetition] = useState("");
+  const [matchDate, setMatchDate] = useState("");
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 py-12 px-4 text-slate-900">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 rounded-2xl bg-white/90 p-6 shadow-xl backdrop-blur md:p-10">
+        <header className="flex flex-col gap-2">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-500">
+            Phase 1 — MatchPost
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+            Match result → Instagram post
+          </h1>
+          <p className="text-base text-slate-600">
+            Enter match details and preview your 1080×1080 post layout.
+          </p>
+        </header>
+
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+          <form className="space-y-4 rounded-xl bg-slate-50 p-5 shadow-inner lg:col-span-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="homeTeamName">
+                Home Team Name
+              </label>
+              <input
+                id="homeTeamName"
+                type="text"
+                value={homeTeamName}
+                onChange={(e) => setHomeTeamName(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="FC Awesome"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="homeLogoUrl">
+                Home Logo URL
+              </label>
+              <input
+                id="homeLogoUrl"
+                type="url"
+                value={homeLogoUrl}
+                onChange={(e) => setHomeLogoUrl(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="https://example.com/home-logo.png"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="awayTeamName">
+                Away Team Name
+              </label>
+              <input
+                id="awayTeamName"
+                type="text"
+                value={awayTeamName}
+                onChange={(e) => setAwayTeamName(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="United City"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="awayLogoUrl">
+                Away Logo URL
+              </label>
+              <input
+                id="awayLogoUrl"
+                type="url"
+                value={awayLogoUrl}
+                onChange={(e) => setAwayLogoUrl(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="https://example.com/away-logo.png"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="finalScore">
+                Final Score
+              </label>
+              <input
+                id="finalScore"
+                type="text"
+                value={finalScore}
+                onChange={(e) => setFinalScore(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="4–2"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="competition">
+                Competition (optional)
+              </label>
+              <input
+                id="competition"
+                type="text"
+                value={competition}
+                onChange={(e) => setCompetition(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="Champions League"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-slate-700" htmlFor="matchDate">
+                Match Date (optional)
+              </label>
+              <input
+                id="matchDate"
+                type="text"
+                value={matchDate}
+                onChange={(e) => setMatchDate(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                placeholder="Nov 4, 2025"
+              />
+            </div>
+          </form>
+
+          <div className="rounded-xl border border-dashed border-slate-200 bg-slate-900/90 p-6 shadow-xl lg:col-span-3">
+            <div className="flex h-full min-h-[420px] items-center justify-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 text-center">
+              <div className="space-y-2 text-slate-200">
+                <p className="text-sm uppercase tracking-[0.2em] text-indigo-300">
+                  Preview
+                </p>
+                <p className="text-xl font-semibold">
+                  Generated 1080×1080 image will appear here
+                </p>
+                <p className="text-sm text-slate-400">
+                  Add team details to prepare your MatchPost design.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

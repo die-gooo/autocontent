@@ -120,26 +120,36 @@ export async function POST(request: Request) {
     const canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     const ctx = canvas.getContext("2d");
 
+    // Background gradient
     const gradient = ctx.createLinearGradient(0, 0, 0, CANVAS_SIZE);
     gradient.addColorStop(0, "#0f172a");
     gradient.addColorStop(1, "#111827");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
+    // Inner panel
     ctx.fillStyle = "rgba(255,255,255,0.06)";
-    ctx.fillRect(PADDING / 2, PADDING / 2, CANVAS_SIZE - PADDING, CANVAS_SIZE - PADDING);
+    ctx.fillRect(
+      PADDING / 2,
+      PADDING / 2,
+      CANVAS_SIZE - PADDING,
+      CANVAS_SIZE - PADDING,
+    );
 
     ctx.fillStyle = "#e5e7eb";
     ctx.textAlign = "center";
 
+    // Competition
     ctx.font = "bold 28px 'Arial'";
     if (data.competition) {
       ctx.fillText(data.competition.toUpperCase(), CENTER, 90);
     }
 
+    // FINAL label
     ctx.font = "600 22px 'Arial'";
     ctx.fillText("FINAL", CENTER, 130);
 
+    // Match date
     if (data.matchDate) {
       ctx.font = "20px 'Arial'";
       ctx.fillStyle = "#cbd5e1";
@@ -147,9 +157,16 @@ export async function POST(request: Request) {
       ctx.fillStyle = "#e5e7eb";
     }
 
+    // Logos
     drawLogo(ctx, homeLogo, PADDING, 260);
-    drawLogo(ctx, awayLogo, CANVAS_SIZE - PADDING - LOGO_SIZE, 260);
+    drawLogo(
+      ctx,
+      awayLogo,
+      CANVAS_SIZE - PADDING - LOGO_SIZE,
+      260,
+    );
 
+    // Team names
     ctx.font = "bold 48px 'Arial'";
     ctx.fillText(
       data.homeTeamName,
@@ -162,16 +179,25 @@ export async function POST(request: Request) {
       260 + LOGO_SIZE + 60,
     );
 
+    // Score
     ctx.font = "bold 160px 'Arial'";
     ctx.fillText(data.finalScore, CENTER, 620);
 
+    // Watermark
     ctx.font = "20px 'Arial'";
     ctx.fillStyle = "#cbd5e1";
     ctx.fillText("made with MatchPost", CENTER, CANVAS_SIZE - 50);
 
+    // Buffer PNG
     const buffer = canvas.toBuffer("image/png");
 
-    return new Response(buffer, {
+    // 👉 FIX: convert Buffer (Node) → ArrayBuffer (BodyInit valido)
+    const arrayBuffer = buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength,
+    );
+
+    return new Response(arrayBuffer, {
       status: 200,
       headers: {
         "Content-Type": "image/png",
@@ -181,7 +207,10 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     return new Response(
-      JSON.stringify({ error: "Failed to generate image", details: `${err}` }),
+      JSON.stringify({
+        error: "Failed to generate image",
+        details: `${err}`,
+      }),
       { status: 500 },
     );
   }
